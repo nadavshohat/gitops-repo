@@ -1,1 +1,8 @@
+services:
+  frontend:
+    image: ""
+  product-service:
+    image: ""
+  order-service:
+    image: ""
 
