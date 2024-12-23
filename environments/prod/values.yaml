@@ -1,7 +1,7 @@
 services:
   frontend:
-    image: ""
+    image: 
   product-service:
-    image: ""
+    image: 
   order-service:
-    image: ""
+    image: 
