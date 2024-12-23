@@ -1,7 +1,7 @@
 services:
   frontend:
-    image: "767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-76677c303c42aca6ff23365140d0a57a232ff912"
+    image: "767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-3eeb5c168d936220458d0d12cd6b07b3de3caded"
   product-service:
-    image: "767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-76677c303c42aca6ff23365140d0a57a232ff912"
+    image: "767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-3eeb5c168d936220458d0d12cd6b07b3de3caded"
   order-service:
-    image: "767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-76677c303c42aca6ff23365140d0a57a232ff912"
+    image: "767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-3eeb5c168d936220458d0d12cd6b07b3de3caded"
