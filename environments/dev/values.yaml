@@ -1,7 +1,53 @@
 services:
   frontend:
-    image: "767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-3eeb5c168d936220458d0d12cd6b07b3de3caded"
-  product-service:
-    image: "767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-3eeb5c168d936220458d0d12cd6b07b3de3caded"
-  order-service:
-    image: "767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-3eeb5c168d936220458d0d12cd6b07b3de3caded"
+    name: frontend
+    image: null
+    port: 80
+    replicas: 1
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+
+  product:
+    name: product-service
+    image: null
+    port: 8080
+    replicas: 1
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+      requests:
+        cpu: 500m
+        memory: 512Mi
+    mongodb:
+      uri: mongodb://mongodb:27017/product-service
+
+  order:
+    name: order-service
+    image: null
+    port: 8081
+    replicas: 1
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+      requests:
+        cpu: 500m
+        memory: 512Mi
+    mongodb:
+      uri: mongodb://mongodb:27017/order-service
+
+mongodb:
+  enabled: true
+  name: mongodb
+  image: mongo:latest
+  port: 27017
+  persistence:
+    enabled: true
+    size: 10Gi
+    accessMode: ReadWriteOnce
