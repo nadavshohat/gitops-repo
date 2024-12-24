@@ -39,10 +39,7 @@ services:
         memory: 512Mi
     mongodb:
       uri: mongodb://mongodb:27017/order-service
-  product-service:
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-dev-ad76e226024d57a5dab9e4875255d6504abfed86
-  order-service:
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-dev-ad76e226024d57a5dab9e4875255d6504abfed86
+ 
 mongodb:
   enabled: true
   name: mongodb
