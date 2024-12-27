@@ -24,7 +24,9 @@ services:
         cpu: 500m
         memory: 512Mi
     mongodb:
-      uri: mongodb://mongodb:27017/product-service
+      secretName: documentdb-credentials
+      secretKey: MONGODB_URI
+      dbName: product-service
   order:
     name: order-service
     image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-dev-e77ca19f210f2e74663b7297f4525114500ac7ac
@@ -38,13 +40,10 @@ services:
         cpu: 500m
         memory: 512Mi
     mongodb:
-      uri: mongodb://mongodb:27017/order-service
+      secretName: documentdb-credentials
+      secretKey: MONGODB_URI
+      dbName: order-service
+
+# Disable local MongoDB since we're using DocumentDB
 mongodb:
-  enabled: true
-  name: mongodb
-  image: mongo:latest
-  port: 27017
-  persistence:
-    enabled: true
-    size: 10Gi
-    accessMode: ReadWriteOnce
+  enabled: false
