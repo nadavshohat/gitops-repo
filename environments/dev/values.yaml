@@ -1,7 +1,7 @@
 services:
   frontend:
     name: frontend
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-dev-cd125c96c22194a238d4bd2d549644723b95f321
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-dev-5fac25f00407f34834cc6380e7a1379bbe81ed37
     port: 80
     replicas: 1
     resources:
@@ -13,7 +13,7 @@ services:
         memory: 256Mi
   product:
     name: product-service
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-dev-cd125c96c22194a238d4bd2d549644723b95f321
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-dev-5fac25f00407f34834cc6380e7a1379bbe81ed37
     port: 8080
     replicas: 1
     resources:
@@ -29,7 +29,7 @@ services:
       dbName: product-service
   order:
     name: order-service
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-dev-cd125c96c22194a238d4bd2d549644723b95f321
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-dev-5fac25f00407f34834cc6380e7a1379bbe81ed37
     port: 8081
     replicas: 1
     resources:
