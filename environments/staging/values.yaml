@@ -1,7 +1,58 @@
+# Global Values
+environment: staging
+domain: nshohat.online
+clusterName: staging-eks-cluster
+
+# Karpenter Configuration
+karpenter:
+  namespace: karpenter
+  nodeClass:
+    name: default
+    amiAlias: al2023@latest
+    role: KarpenterNodeRole-staging-eks-cluster
+    rootVolume:
+      deviceName: /dev/xvda
+      size: 80Gi  # Medium size for staging
+      type: gp3
+      encrypted: true
+    metadataOptions:
+      httpEndpoint: enabled
+      httpProtocolIPv6: disabled
+      httpPutResponseHopLimit: 1
+      httpTokens: required
+  nodePool:
+    name: default
+    disruption:
+      consolidateAfter: 60s  # Longer grace period for staging
+      consolidationPolicy: WhenEmptyOrUnderutilized
+    limits:
+      cpu: "200"
+      memory: "800Gi"
+    requirements:
+      - key: kubernetes.io/arch
+        operator: In
+        values: ["amd64"]
+      - key: kubernetes.io/os
+        operator: In
+        values: ["linux"]
+      - key: karpenter.sh/capacity-type
+        operator: In
+        values: ["on-demand", "spot"]  # Mix of on-demand and spot for staging
+      - key: karpenter.k8s.aws/instance-category
+        operator: In
+        values: ["m", "r"]  # Using m5/m6 and r5/r6 for staging
+      - key: karpenter.k8s.aws/instance-generation
+        operator: Gt
+        values: ["2"]
+      - key: karpenter.k8s.aws/instance-size
+        operator: In
+        values: ["large", "xlarge"]  # Medium-sized instances for staging
+    weight: 10
+
 services:
   frontend:
     name: frontend
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-staging-d5074590a4c5eb819f780d5bf00b120338b79c54
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-staging-dc6dcd918791c8c5475c18de184faa453452ae90
     port: 80
     replicas: 1
     resources:
@@ -13,7 +64,7 @@ services:
         memory: 256Mi
   product:
     name: product-service
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-staging-d5074590a4c5eb819f780d5bf00b120338b79c54
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-staging-dc6dcd918791c8c5475c18de184faa453452ae90
     port: 8080
     replicas: 1
     resources:
@@ -24,10 +75,12 @@ services:
         cpu: 500m
         memory: 512Mi
     mongodb:
-      uri: mongodb://mongodb:27017/product-service
+      secretName: documentdb-credentials
+      secretKey: MONGODB_URI
+      dbName: product-service
   order:
     name: order-service
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-staging-d5074590a4c5eb819f780d5bf00b120338b79c54
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-staging-dc6dcd918791c8c5475c18de184faa453452ae90
     port: 8081
     replicas: 1
     resources:
@@ -38,13 +91,9 @@ services:
         cpu: 500m
         memory: 512Mi
     mongodb:
-      uri: mongodb://mongodb:27017/order-service
+      secretName: documentdb-credentials
+      secretKey: MONGODB_URI
+      dbName: order-service
+# Disable local MongoDB since we're using DocumentDB
 mongodb:
-  enabled: true
-  name: mongodb
-  image: mongo:latest
-  port: 27017
-  persistence:
-    enabled: true
-    size: 10Gi
-    accessMode: ReadWriteOnce
+  enabled: false

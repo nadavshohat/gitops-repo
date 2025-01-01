@@ -1,3 +1,54 @@
+# Global Values
+environment: dev
+domain: nshohat.online
+clusterName: dev-eks-cluster
+
+# Karpenter Configuration
+karpenter:
+  namespace: karpenter
+  nodeClass:
+    name: default
+    amiAlias: al2023@latest
+    role: KarpenterNodeRole-dev-eks-cluster
+    rootVolume:
+      deviceName: /dev/xvda
+      size: 50Gi  
+      type: gp3
+      encrypted: true
+    metadataOptions:
+      httpEndpoint: enabled
+      httpProtocolIPv6: disabled
+      httpPutResponseHopLimit: 1
+      httpTokens: required
+  nodePool:
+    name: default
+    disruption:
+      consolidateAfter: 30s
+      consolidationPolicy: WhenEmptyOrUnderutilized
+    limits:
+      cpu: "100"
+      memory: "400Gi"
+    requirements:
+      - key: kubernetes.io/arch
+        operator: In
+        values: ["amd64"]
+      - key: kubernetes.io/os
+        operator: In
+        values: ["linux"]
+      - key: karpenter.sh/capacity-type
+        operator: In
+        values: ["spot"]  # Only spot instances for dev to save costs
+      - key: karpenter.k8s.aws/instance-category
+        operator: In
+        values: ["t", "m"]  # Using t2/t3 and m5/m6 for dev (cost-effective)
+      - key: karpenter.k8s.aws/instance-generation
+        operator: Gt
+        values: ["2"]
+      - key: karpenter.k8s.aws/instance-size
+        operator: In
+        values: ["medium", "large"]  # Smaller instances for dev
+    weight: 10
+
 services:
   frontend:
     name: frontend

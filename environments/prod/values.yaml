@@ -1,3 +1,54 @@
+# Global Values
+environment: prod
+domain: nshohat.online
+clusterName: prod-eks-cluster
+
+# Karpenter Configuration
+karpenter:
+  namespace: karpenter
+  nodeClass:
+    name: default
+    amiAlias: al2023@latest
+    role: KarpenterNodeRole-prod-eks-cluster
+    rootVolume:
+      deviceName: /dev/xvda
+      size: 100Gi  # Larger root volume for production
+      type: gp3
+      encrypted: true
+    metadataOptions:
+      httpEndpoint: enabled
+      httpProtocolIPv6: disabled
+      httpPutResponseHopLimit: 1
+      httpTokens: required
+  nodePool:
+    name: default
+    disruption:
+      consolidateAfter: 300s  # Longer grace period for production
+      consolidationPolicy: WhenEmptyOrUnderutilized
+    limits:
+      cpu: "400"
+      memory: "1600Gi"
+    requirements:
+      - key: kubernetes.io/arch
+        operator: In
+        values: ["amd64"]
+      - key: kubernetes.io/os
+        operator: In
+        values: ["linux"]
+      - key: karpenter.sh/capacity-type
+        operator: In
+        values: ["on-demand"]  # Only on-demand instances for production
+      - key: karpenter.k8s.aws/instance-category
+        operator: In
+        values: ["c", "m", "r"]  # Using compute, memory, and memory-optimized for prod
+      - key: karpenter.k8s.aws/instance-generation
+        operator: Gt
+        values: ["2"]
+      - key: karpenter.k8s.aws/instance-size
+        operator: In
+        values: ["2xlarge", "4xlarge"]  # Larger instances for production
+    weight: 10
+
 services:
   frontend:
     name: frontend
@@ -24,10 +75,12 @@ services:
         cpu: 500m
         memory: 512Mi
     mongodb:
-      uri: mongodb://mongodb:27017/product-service
+      secretName: documentdb-credentials
+      secretKey: MONGODB_URI
+      dbName: product-service
   order:
     name: order-service
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-prod-d5074590a4c5eb819f780d5bf00b120338b79c54
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-prod-dc6dcd918791c8c5475c18de184faa453452ae90
     port: 8081
     replicas: 1
     resources:
@@ -38,13 +91,9 @@ services:
         cpu: 500m
         memory: 512Mi
     mongodb:
-      uri: mongodb://mongodb:27017/order-service
+      secretName: documentdb-credentials
+      secretKey: MONGODB_URI
+      dbName: order-service
+# Disable local MongoDB since we're using DocumentDB
 mongodb:
-  enabled: true
-  name: mongodb
-  image: mongo:latest
-  port: 27017
-  persistence:
-    enabled: true
-    size: 10Gi
-    accessMode: ReadWriteOnce
+  enabled: false
