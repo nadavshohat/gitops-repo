@@ -2,7 +2,6 @@
 environment: dev
 domain: nshohat.online
 clusterName: dev-eks-cluster
-
 # Karpenter Configuration
 karpenter:
   namespace: karpenter
@@ -18,7 +17,7 @@ karpenter:
     role: KarpenterNodeRole-dev-eks-cluster
     rootVolume:
       deviceName: /dev/xvda
-      size: 50Gi  
+      size: 50Gi
       type: gp3
       encrypted: true
     metadataOptions:
@@ -50,11 +49,10 @@ karpenter:
         operator: In
         values: ["t3.medium", "t3.large", "m5.large", "m6a.large"]
     weight: 10
-
 services:
   frontend:
     name: frontend
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-dev-1df8f080f5fc1b718894aa69ab1665e07cff9f89
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-dev-9e002bc22cec02597b11672b4b909acfbf598092
     port: 80
     replicas: 1
     resources:
@@ -66,7 +64,7 @@ services:
         memory: 256Mi
   product:
     name: product-service
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-dev-1df8f080f5fc1b718894aa69ab1665e07cff9f89
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-dev-9e002bc22cec02597b11672b4b909acfbf598092
     port: 8080
     replicas: 1
     resources:
@@ -82,7 +80,7 @@ services:
       dbName: product-service
   order:
     name: order-service
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-dev-1df8f080f5fc1b718894aa69ab1665e07cff9f89
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-dev-9e002bc22cec02597b11672b4b909acfbf598092
     port: 8081
     replicas: 1
     resources:
