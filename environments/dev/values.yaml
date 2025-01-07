@@ -29,24 +29,18 @@ karpenter:
       cpu: "100"
       memory: "400Gi"
     requirements:
-      - key: kubernetes.io/arch
+      - key: "kubernetes.io/arch"
         operator: In
         values: ["amd64"]
-      - key: kubernetes.io/os
+      - key: "kubernetes.io/os"
         operator: In
         values: ["linux"]
-      - key: karpenter.sh/capacity-type
+      - key: "karpenter.sh/capacity-type"
         operator: In
-        values: ["spot"]  # Only spot instances for dev to save costs
-      - key: karpenter.k8s.aws/instance-category
+        values: ["spot"]
+      - key: "node.kubernetes.io/instance-type"
         operator: In
-        values: ["t", "m"]  # Using t2/t3 and m5/m6 for dev (cost-effective)
-      - key: karpenter.k8s.aws/instance-generation
-        operator: Gt
-        values: ["2"]
-      - key: karpenter.k8s.aws/instance-size
-        operator: In
-        values: ["medium", "large"]  # Smaller instances for dev
+        values: ["t3.medium", "t3.large", "m5.large", "m6a.large"]
     weight: 10
 
 services:
