@@ -8,8 +8,14 @@ karpenter:
   namespace: karpenter
   nodeClass:
     name: default
-    amiAlias: al2023@latest
-    role: KarpenterNodeRole-dev-eks-cluster
+    amiFamily: AL2023
+    securityGroupSelectorTerms:
+      - tags:
+          karpenter.sh/discovery: ${clusterName}
+    subnetSelectorTerms:
+      - tags:
+          karpenter.sh/discovery: ${clusterName}
+    role: KarpenterNodeRole-${clusterName}
     rootVolume:
       deviceName: /dev/xvda
       size: 50Gi  
@@ -20,6 +26,8 @@ karpenter:
       httpProtocolIPv6: disabled
       httpPutResponseHopLimit: 1
       httpTokens: required
+    tags:
+      karpenter.sh/discovery: ${clusterName}
   nodePool:
     name: default
     disruption:
