@@ -2,57 +2,11 @@
 environment: dev
 domain: nshohat.online
 clusterName: dev-eks-cluster
-# Karpenter Configuration
-karpenter:
-  namespace: karpenter
-  nodeClass:
-    name: default
-    amiFamily: AL2023
-    securityGroupSelectorTerms:
-      - tags:
-          karpenter.sh/discovery: dev-eks-cluster
-    subnetSelectorTerms:
-      - tags:
-          karpenter.sh/discovery: dev-eks-cluster
-    role: KarpenterNodeRole-dev-eks-cluster
-    rootVolume:
-      deviceName: /dev/xvda
-      size: 50Gi
-      type: gp3
-      encrypted: true
-    metadataOptions:
-      httpEndpoint: enabled
-      httpProtocolIPv6: disabled
-      httpPutResponseHopLimit: 1
-      httpTokens: required
-    tags:
-      karpenter.sh/discovery: dev-eks-cluster
-  nodePool:
-    name: default
-    disruption:
-      consolidateAfter: 30s
-      consolidationPolicy: WhenEmptyOrUnderutilized
-    limits:
-      cpu: "100"
-      memory: "400Gi"
-    requirements:
-      - key: "kubernetes.io/arch"
-        operator: In
-        values: ["amd64"]
-      - key: "kubernetes.io/os"
-        operator: In
-        values: ["linux"]
-      - key: "karpenter.sh/capacity-type"
-        operator: In
-        values: ["spot"]
-      - key: "node.kubernetes.io/instance-type"
-        operator: In
-        values: ["t3.medium", "t3.large", "m5.large", "m6a.large"]
-    weight: 10
+
 services:
   frontend:
     name: frontend
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-dev-9e002bc22cec02597b11672b4b909acfbf598092
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-dev-1df8f080f5fc1b718894aa69ab1665e07cff9f89
     port: 80
     replicas: 1
     resources:
@@ -64,7 +18,7 @@ services:
         memory: 256Mi
   product:
     name: product-service
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-dev-9e002bc22cec02597b11672b4b909acfbf598092
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-dev-1df8f080f5fc1b718894aa69ab1665e07cff9f89
     port: 8080
     replicas: 1
     resources:
@@ -80,7 +34,7 @@ services:
       dbName: product-service
   order:
     name: order-service
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-dev-9e002bc22cec02597b11672b4b909acfbf598092
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-dev-1df8f080f5fc1b718894aa69ab1665e07cff9f89
     port: 8081
     replicas: 1
     resources:
