@@ -11,11 +11,11 @@ karpenter:
     amiFamily: AL2023
     securityGroupSelectorTerms:
       - tags:
-          karpenter.sh/discovery: ${clusterName}
+          karpenter.sh/discovery: dev-eks-cluster
     subnetSelectorTerms:
       - tags:
-          karpenter.sh/discovery: ${clusterName}
-    role: KarpenterNodeRole-${clusterName}
+          karpenter.sh/discovery: dev-eks-cluster
+    role: KarpenterNodeRole-dev-eks-cluster
     rootVolume:
       deviceName: /dev/xvda
       size: 50Gi  
@@ -27,7 +27,7 @@ karpenter:
       httpPutResponseHopLimit: 1
       httpTokens: required
     tags:
-      karpenter.sh/discovery: ${clusterName}
+      karpenter.sh/discovery: dev-eks-cluster
   nodePool:
     name: default
     disruption:
