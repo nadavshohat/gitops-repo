@@ -2,7 +2,6 @@
 environment: prod
 domain: nshohat.online
 clusterName: prod-eks-cluster
-
 # Karpenter Configuration
 karpenter:
   namespace: karpenter
@@ -12,7 +11,7 @@ karpenter:
     role: KarpenterNodeRole-prod-eks-cluster
     rootVolume:
       deviceName: /dev/xvda
-      size: 100Gi  # Larger root volume for production
+      size: 100Gi # Larger root volume for production
       type: gp3
       encrypted: true
     metadataOptions:
@@ -23,7 +22,7 @@ karpenter:
   nodePool:
     name: default
     disruption:
-      consolidateAfter: 300s  # Longer grace period for production
+      consolidateAfter: 300s # Longer grace period for production
       consolidationPolicy: WhenEmptyOrUnderutilized
     limits:
       cpu: "400"
@@ -37,22 +36,21 @@ karpenter:
         values: ["linux"]
       - key: karpenter.sh/capacity-type
         operator: In
-        values: ["on-demand"]  # Only on-demand instances for production
+        values: ["on-demand"] # Only on-demand instances for production
       - key: karpenter.k8s.aws/instance-category
         operator: In
-        values: ["c", "m", "r"]  # Using compute, memory, and memory-optimized for prod
+        values: ["c", "m", "r"] # Using compute, memory, and memory-optimized for prod
       - key: karpenter.k8s.aws/instance-generation
         operator: Gt
         values: ["2"]
       - key: karpenter.k8s.aws/instance-size
         operator: In
-        values: ["2xlarge", "4xlarge"]  # Larger instances for production
+        values: ["2xlarge", "4xlarge"] # Larger instances for production
     weight: 10
-
 services:
   frontend:
     name: frontend
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-prod-d5074590a4c5eb819f780d5bf00b120338b79c54
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-prod-7f7e8715d7d49b11c867244a6615c79f7669230b
     port: 80
     replicas: 1
     resources:
@@ -64,7 +62,7 @@ services:
         memory: 256Mi
   product:
     name: product-service
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-prod-d5074590a4c5eb819f780d5bf00b120338b79c54
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-prod-7f7e8715d7d49b11c867244a6615c79f7669230b
     port: 8080
     replicas: 1
     resources:
@@ -80,7 +78,7 @@ services:
       dbName: product-service
   order:
     name: order-service
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-prod-dc6dcd918791c8c5475c18de184faa453452ae90
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-prod-7f7e8715d7d49b11c867244a6615c79f7669230b
     port: 8081
     replicas: 1
     resources:
