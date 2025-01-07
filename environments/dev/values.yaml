@@ -5,7 +5,7 @@ clusterName: dev-eks-cluster
 services:
   frontend:
     name: frontend
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-dev-c00a558aacfccbf96b4e4b29f3ce60b79c31db9f
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-dev-17cb56a16a6a85663727d8a2afb61b3c68cda51f
     port: 80
     replicas: 1
     resources:
@@ -17,7 +17,7 @@ services:
         memory: 256Mi
   product:
     name: product-service
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-dev-c00a558aacfccbf96b4e4b29f3ce60b79c31db9f
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-dev-17cb56a16a6a85663727d8a2afb61b3c68cda51f
     port: 8080
     replicas: 1
     resources:
@@ -33,7 +33,7 @@ services:
       dbName: product-service
   order:
     name: order-service
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-dev-c00a558aacfccbf96b4e4b29f3ce60b79c31db9f
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-dev-17cb56a16a6a85663727d8a2afb61b3c68cda51f
     port: 8081
     replicas: 1
     resources:
