@@ -5,7 +5,7 @@ clusterName: dev-eks-cluster
 services:
   frontend:
     name: frontend
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-dev-b59a46ae174161dced824616a5fb102d0fd20e47
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-dev-ef508420ea921e770479fbcf0215e654ee913180
     port: 80
     replicas: 1
     resources:
@@ -17,7 +17,7 @@ services:
         memory: 256Mi
   product:
     name: product-service
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-dev-b59a46ae174161dced824616a5fb102d0fd20e47
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-dev-ef508420ea921e770479fbcf0215e654ee913180
     port: 8080
     replicas: 1
     resources:
@@ -33,7 +33,7 @@ services:
       dbName: product-service
   order:
     name: order-service
-    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-dev-b59a46ae174161dced824616a5fb102d0fd20e47
+    image: 767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-dev-ef508420ea921e770479fbcf0215e654ee913180
     port: 8081
     replicas: 1
     resources:
@@ -50,16 +50,13 @@ services:
 # Disable local MongoDB since we're using DocumentDB
 mongodb:
   enabled: false
-
 # External Secrets Configuration
 aws:
   region: us-east-1
-
 externalSecrets:
   serviceAccount:
     name: external-secrets-sa
     namespace: external-secrets
-
 documentdb:
   secretName: documentdb-credentials
   namespace: dev
