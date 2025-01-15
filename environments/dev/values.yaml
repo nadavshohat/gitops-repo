@@ -50,3 +50,18 @@ services:
 # Disable local MongoDB since we're using DocumentDB
 mongodb:
   enabled: false
+
+# External Secrets Configuration
+aws:
+  region: us-east-1
+
+externalSecrets:
+  serviceAccount:
+    name: external-secrets-sa
+    namespace: external-secrets
+
+documentdb:
+  secretName: documentdb-credentials
+  namespace: dev
+  refreshInterval: 1h
+  awsSecretKey: app/dev/microstore-v6

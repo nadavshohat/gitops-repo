@@ -2,53 +2,6 @@
 environment: staging
 domain: nshohat.online
 clusterName: staging-eks-cluster
-
-# Karpenter Configuration
-karpenter:
-  namespace: karpenter
-  nodeClass:
-    name: default
-    amiAlias: al2023@latest
-    role: KarpenterNodeRole-staging-eks-cluster
-    rootVolume:
-      deviceName: /dev/xvda
-      size: 80Gi  # Medium size for staging
-      type: gp3
-      encrypted: true
-    metadataOptions:
-      httpEndpoint: enabled
-      httpProtocolIPv6: disabled
-      httpPutResponseHopLimit: 1
-      httpTokens: required
-  nodePool:
-    name: default
-    disruption:
-      consolidateAfter: 60s  # Longer grace period for staging
-      consolidationPolicy: WhenEmptyOrUnderutilized
-    limits:
-      cpu: "200"
-      memory: "800Gi"
-    requirements:
-      - key: kubernetes.io/arch
-        operator: In
-        values: ["amd64"]
-      - key: kubernetes.io/os
-        operator: In
-        values: ["linux"]
-      - key: karpenter.sh/capacity-type
-        operator: In
-        values: ["on-demand", "spot"]  # Mix of on-demand and spot for staging
-      - key: karpenter.k8s.aws/instance-category
-        operator: In
-        values: ["m", "r"]  # Using m5/m6 and r5/r6 for staging
-      - key: karpenter.k8s.aws/instance-generation
-        operator: Gt
-        values: ["2"]
-      - key: karpenter.k8s.aws/instance-size
-        operator: In
-        values: ["large", "xlarge"]  # Medium-sized instances for staging
-    weight: 10
-
 services:
   frontend:
     name: frontend
