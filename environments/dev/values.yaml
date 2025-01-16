@@ -2,15 +2,13 @@
 environment: dev
 domain: nshohat.online
 clusterName: dev-eks-cluster
-
 # Monitoring Configuration
 monitoring:
   interval: 30s
-
 services:
   frontend:
     name: frontend
-    image: "767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-dev-3cd1be384327843a6f90808eb8c0fdeddcc24388"
+    image: "767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-dev-f69758e2cd1fbc3f7ac9762af5d4f0284808ff94"
     port: 80
     replicas: 1
     probes:
@@ -35,7 +33,7 @@ services:
         memory: 256Mi
   product:
     name: product-service
-    image: "767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-dev-3cd1be384327843a6f90808eb8c0fdeddcc24388"
+    image: "767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:product-service-dev-f69758e2cd1fbc3f7ac9762af5d4f0284808ff94"
     port: 8080
     replicas: 1
     resources:
@@ -51,7 +49,7 @@ services:
       dbName: product-service
   order:
     name: order-service
-    image: "767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-dev-3cd1be384327843a6f90808eb8c0fdeddcc24388"
+    image: "767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:order-service-dev-f69758e2cd1fbc3f7ac9762af5d4f0284808ff94"
     port: 8081
     replicas: 1
     resources:
@@ -65,7 +63,6 @@ services:
       secretName: documentdb-credentials
       secretKey: MONGODB_URI
       dbName: order-service
-
 # External Secrets Configuration
 aws:
   region: us-east-1
