@@ -2,12 +2,30 @@
 environment: dev
 domain: nshohat.online
 clusterName: dev-eks-cluster
+
+# Monitoring Configuration
+monitoring:
+  interval: 30s
+
 services:
   frontend:
     name: frontend
     image: "767397741479.dkr.ecr.us-east-1.amazonaws.com/microstore:frontend-dev-3cd1be384327843a6f90808eb8c0fdeddcc24388"
     port: 80
     replicas: 1
+    probes:
+      readiness:
+        initialDelay: 10
+        period: 5
+        timeout: 2
+        successThreshold: 1
+        failureThreshold: 3
+      liveness:
+        initialDelay: 15
+        period: 10
+        timeout: 2
+        successThreshold: 1
+        failureThreshold: 3
     resources:
       limits:
         cpu: 500m
@@ -47,9 +65,7 @@ services:
       secretName: documentdb-credentials
       secretKey: MONGODB_URI
       dbName: order-service
-# Disable local MongoDB since we're using DocumentDB
-mongodb:
-  enabled: false
+
 # External Secrets Configuration
 aws:
   region: us-east-1
