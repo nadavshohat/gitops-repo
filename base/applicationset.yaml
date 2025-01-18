@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: microstore
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - environment: dev
+            branch: dev
+          - environment: staging
+            branch: staging
+          - environment: prod
+            branch: main
+  template:
+    metadata:
+      name: microstore-{{environment}}
+      namespace: argocd
+    spec:
+      project: default
+      sources:
+        - repoURL: https://github.com/nadavcool543/MicroStore.git
+          targetRevision: '{{branch}}'
+          path: helm
+          helm:
+            valueFiles:
+              - $values/environments/{{environment}}/values.yaml
+        - repoURL: https://github.com/nadavcool543/gitops-repo.git
+          targetRevision: HEAD
+          path: .
+          ref: values
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{environment}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true 
