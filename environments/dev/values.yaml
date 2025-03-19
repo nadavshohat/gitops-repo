@@ -2,9 +2,6 @@
 environment: dev
 domain: nshohat.online
 clusterName: dev-eks-cluster
-# Monitoring Configuration
-monitoring:
-  interval: 30s
 services:
   frontend:
     name: frontend
